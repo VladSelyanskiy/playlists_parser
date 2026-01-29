@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Форма ввода данных</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input { padding: 8px; width: 250px; }
+        button { padding: 10px 15px; }
+    </style>
+</head>
+<body>
+
+    <h2>Прием</h2>
+    
+    <form action="/submit" method="post">
+        <!-- Поле для ссылки -->
+        <div class="form-group">
+            <label for="website">Введите адрес сайта:</label>
+            <input type="text" name="input_url" placeholder="https://example.com" required>
+        </div>
+
+        <!-- Кнопка отправки -->
+        <button type="submit">Отправить</button>
+    </form>
+
+</body>
+</html>
