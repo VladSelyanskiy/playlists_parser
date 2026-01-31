@@ -1,7 +1,16 @@
-from fastapi import FastAPI, Form
+import logging
+
 import uvicorn
-from fastapi.responses import HTMLResponse, FileResponse
-from config import config
+from fastapi import FastAPI, Form
+from fastapi.responses import FileResponse, HTMLResponse
+
+from src.config import config
+
+# Logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -18,6 +27,7 @@ async def favicon():
 
 @app.post("/submit")
 async def get_status(input_url: str = Form(...)):
+    logger.info(f"Received URL: {input_url}")
     return {"url": input_url}
 
 
