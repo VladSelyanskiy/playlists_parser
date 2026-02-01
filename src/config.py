@@ -1,11 +1,11 @@
-from pydantic import BaseModel, Field
+from pydantic_settings import BaseSettings
 import os
 
 
-class Config(BaseModel):
+class Settings(BaseSettings):
 
-    PATH_FAVICON: str = Field(default=os.path.join("src", "static", "favicon.ico"))
-    PATH_HTML: str = Field(default=os.path.join("src", "static", "index.html"))
+    PATH_FAVICON: str = os.path.join("src", "static", "favicon.ico")
+    PATH_HTML: str = os.path.join("src", "static", "index.html")
 
 
-config = Config()
+settings = Settings()

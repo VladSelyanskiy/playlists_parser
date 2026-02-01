@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Form
 from fastapi.responses import FileResponse, HTMLResponse
 
-from src.config import config
+from src.config import settings
 
 # Logging
 logging.basicConfig(
@@ -17,12 +17,12 @@ app = FastAPI()
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
-    return HTMLResponse(content=open(config.PATH_HTML, "r").read())
+    return HTMLResponse(content=open(settings.PATH_HTML, "r").read())
 
 
 @app.get("/favicon.ico")
 async def favicon():
-    return FileResponse(config.PATH_FAVICON)
+    return FileResponse(settings.PATH_FAVICON)
 
 
 @app.post("/submit")
