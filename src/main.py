@@ -25,6 +25,12 @@ async def favicon():
     return FileResponse(settings.PATH_FAVICON)
 
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {"status": "ok"}
+
+
 @app.post("/submit")
 async def get_status(input_url: str = Form(...)):
     logger.info(f"Received URL: {input_url}")
