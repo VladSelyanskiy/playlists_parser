@@ -1,6 +1,10 @@
-import requests
 import json
-from typing import Optional, Any
+from typing import Any, Optional
+from urllib.parse import urlparse
+
+import requests
+
+from src.config import conf_api
 
 
 def get_data(
@@ -13,13 +17,8 @@ def get_data(
         with open(path, "r", encoding="utf-8") as file:
             return json.load(file)
     else:
-        response = requests.get(url, headers=headers)
+        api_url = conf_api.URL_API_KEY + urlparse(url).path
+        if "playlists" in api_url:
+            api_url = api_url.replace("playlists", "playlist")
+        response = requests.get(api_url, headers=headers)
         return response.json()
-
-
-if __name__ == "__main__":
-    import pprint
-
-    pprint.pprint(
-        len(get_data(from_file=True, path="tests/test_data.json")["result"]["tracks"])
-    )
