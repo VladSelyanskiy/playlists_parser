@@ -34,7 +34,7 @@ def test_processing_good_response(mock_get):
     }
     mock_get.return_value = mock_response
     # check data is loaded
-    url = "https://api.example.com"
+    url = "https://music.yandex.ru/playlists/42?utm_source=web"
     data = get_data(url)
     assert isinstance(data, TracksCollection)
     assert data.tracks == {"test_title": ["test_artist_1"]}
@@ -49,6 +49,9 @@ def test_processing_bad_response(mock_get):
     mock_response.json.return_value = {"result": "not found"}
     mock_get.return_value = mock_response
     # check data is None
-    url = "https://api.example.com"
-    data = get_data(url)
-    assert data is None
+    url = "https://music.yandex.ru/playlists/42?utm_source=web"
+    assert get_data(url) is None
+
+
+def test_proceesing_bad_url():
+    assert get_data("https://example.com") is None

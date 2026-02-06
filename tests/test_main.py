@@ -25,9 +25,9 @@ def test_ico(client: TestClient):
     )
 
 
-def test_submit(client: TestClient):
-    """Test submit"""
-    data = {"input_url": r"https://example.com"}
-    response = client.post("/submit", data=data)
+def test_tracks(client: TestClient):
+    """Test tracks"""
+    data = {"input_url": "https://example.com"}
+    response = client.post("/tracks", data=data)
     assert response.status_code == 200
-    assert response.json() == {"url": r"https://example.com"}
+    assert response.json() is None
