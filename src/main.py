@@ -1,10 +1,12 @@
 import logging
+from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI, Form
 from fastapi.responses import FileResponse, HTMLResponse
 
 from src.config import conf_static
+from src.services.processing import get_data
 
 # Logging
 logging.basicConfig(
@@ -31,10 +33,13 @@ async def health_check():
     return {"status": "ok"}
 
 
-@app.post("/submit")
-async def get_status(input_url: str = Form(...)):
+@app.post("/tracks")
+async def get_tracks(input_url: str = Form(...)) -> Optional[dict[str, list[str]]]:
     logger.info(f"Received URL: {input_url}")
-    return {"url": input_url}
+    tracks_collection = get_data(input_url)
+    if tracks_collection is None:
+        return None
+    return tracks_collection.tracks
 
 
 if __name__ == "__main__":
