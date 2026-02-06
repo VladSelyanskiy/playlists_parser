@@ -16,7 +16,12 @@ def get_data(
 
     if url is not None:
 
-        api_url = conf_api.URL_API_KEY + urlparse(url).path
+        url_path = urlparse(url).path
+
+        if not url_path.startswith("/playlist"):
+            return None
+
+        api_url = conf_api.URL_API_KEY + url_path
 
         if "playlists" in api_url:
             api_url = api_url.replace("playlists", "playlist")
