@@ -1,6 +1,4 @@
 from fastapi.testclient import TestClient
-from fastapi import HTTPException
-import pytest
 
 
 def test_health(client: TestClient):

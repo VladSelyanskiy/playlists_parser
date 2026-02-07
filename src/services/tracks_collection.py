@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 class TracksCollection:
     def __init__(self, unformatted_json: dict[Any, Any]) -> None:
-        self.tracks = {}  # create empty dictionary for tracks
+        self.tracks: dict[Any, Any] = {}  # create empty dictionary for tracks
 
         try:
             tracks_data = unformatted_json["result"]["tracks"]
@@ -33,7 +33,9 @@ class TracksCollection:
                 logger.warning(f"Skipping invalid track: {e}")
                 continue
 
-        self.playlist_data = self._extract_playlist_metadata(data=unformatted_json)
+        self.playlist_data: dict[str, Optional[str]] = self._extract_playlist_metadata(
+            data=unformatted_json
+        )
 
     def _extract_playlist_metadata(
         self, data: dict[Any, Any]
@@ -46,7 +48,7 @@ class TracksCollection:
             "created",
             "durationMs",
         ]
-        playlist_data = {}
+        playlist_data: dict[str, Optional[str]] = {}
 
         for field in metadata_fields:
             try:

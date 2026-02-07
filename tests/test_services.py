@@ -7,7 +7,8 @@ from src.services.tracks_collection import TracksCollection
 
 
 def test_tracks_collection_from_file(path_to_test_json: str, test_json_data_len: int):
-    tracks_collection = get_data(path=path_to_test_json).tracks
+    collection = get_data(path=path_to_test_json)
+    tracks_collection = collection.tracks if collection is not None else {}
     # check all data is loaded
     assert len(tracks_collection) == test_json_data_len
     # check types of data

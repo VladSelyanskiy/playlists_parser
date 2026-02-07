@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI, Form, HTTPException, status
