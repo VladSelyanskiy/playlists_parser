@@ -2,7 +2,7 @@ import logging
 from typing import Optional
 
 import uvicorn
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, HTTPException, status
 from fastapi.responses import FileResponse, HTMLResponse
 
 from src.config import conf_static
@@ -19,7 +19,11 @@ app = FastAPI()
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
-    return HTMLResponse(content=open(conf_static.PATH_HTML, "r").read())
+    try:
+        with open(conf_static.PATH_HTML, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    except FileNotFoundError:
+        raise HTTPException(status_code=500, detail="HTML file not found")
 
 
 @app.get("/favicon.ico")
@@ -34,11 +38,14 @@ async def health_check():
 
 
 @app.post("/tracks")
-async def get_tracks(input_url: str = Form(...)) -> Optional[dict[str, list[str]]]:
+async def get_tracks(input_url: str = Form(...)) -> dict[str, list[str]]:
     logger.info(f"Received URL: {input_url}")
     tracks_collection = get_data(input_url)
     if tracks_collection is None:
-        return None
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid URL or failed to fetch data",
+        )
     return tracks_collection.tracks
 
 

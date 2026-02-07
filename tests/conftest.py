@@ -19,3 +19,59 @@ def path_to_test_json():
 @pytest.fixture()
 def test_json_data_len():
     return 449
+
+
+@pytest.fixture()
+def test_data_with_duplicates():
+    return {
+        "result": {
+            "tracks": [
+                {
+                    "track": {
+                        "title": "Song",
+                        "artists": [{"name": "Artist1"}],
+                    }
+                },
+                {
+                    "track": {
+                        "title": "Song",
+                        "artists": [{"name": "Artist2"}],
+                    }
+                },
+            ]
+        }
+    }
+
+
+@pytest.fixture()
+def test_data_without_metadata():
+    return {
+        "result": {
+            "tracks": [
+                {
+                    "track": {
+                        "title": "test_title",
+                        "artists": [{"name": "test_artist_1"}],
+                    }
+                }
+            ]
+        }
+    }
+
+
+@pytest.fixture()
+def test_data_with_metadata():
+    return {
+        "result": {
+            "tracks": [
+                {
+                    "track": {
+                        "title": "test_title",
+                        "artists": [{"name": "test_artist_1"}],
+                    }
+                }
+            ],
+            "title": "Title",
+            "durationMs": 676767,
+        }
+    }

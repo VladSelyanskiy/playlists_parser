@@ -1,4 +1,6 @@
 from fastapi.testclient import TestClient
+from fastapi import HTTPException
+import pytest
 
 
 def test_health(client: TestClient):
@@ -25,9 +27,7 @@ def test_ico(client: TestClient):
     )
 
 
-def test_tracks(client: TestClient):
-    """Test tracks"""
+def test_tracks_bad_url(client: TestClient):
     data = {"input_url": "https://example.com"}
     response = client.post("/tracks", data=data)
-    assert response.status_code == 200
-    assert response.json() is None
+    assert response.status_code == 400
