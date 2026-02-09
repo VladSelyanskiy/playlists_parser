@@ -3,7 +3,6 @@ import os
 
 
 class Settings(BaseSettings):
-
     class Static:
         PATH_FAVICON: str = os.path.join("src", "static", "favicon.ico")
         PATH_HTML: str = os.path.join("src", "static", "index.html")

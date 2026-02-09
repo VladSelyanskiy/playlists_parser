@@ -20,7 +20,6 @@ def get_data(
 ) -> Optional[TracksCollection]:
 
     if url is not None:
-
         url_path = urlparse(url).path
 
         if not url_path.startswith("/playlist"):
