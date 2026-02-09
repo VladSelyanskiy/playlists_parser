@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: CI
 
 on:
   push:
@@ -8,11 +8,58 @@ on:
 
 jobs:
 
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+    # Устанавливаем Python
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    
+    # Устанавливаем Poetry
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: 1.8.2
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+
+    # Кэшируем зависимости для ускорения последующих запусков
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+    
+    # Устанавливаем зависимости через Poetry
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+
+    # Проверяем код с помощью ruff (линтер)
+    - name: Run ruff check
+      run: poetry run ruff check .
+    
+    # Проверяем форматирование кода
+    - name: Run ruff format check
+      run: poetry run ruff format --check .
+    
+    # Запускаем тесты с покрытием кода
+    - name: Run tests
+      run: poetry run pytest .
+
+  build:
+
+    runs-on: ubuntu-latest
+    needs: test  # Запускается только если тесты прошли успешно
+    
+    steps:
+    - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build -t ppl:test
+
+  # Проверяем, что контейнер запускается
+    - name: Test Docker image
+      run: docker run --rm ppl:test python -c "print('Container works!')"
