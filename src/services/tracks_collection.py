@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 class TracksCollection:
     def __init__(self, unformatted_json: dict[Any, Any]) -> None:
-        self.tracks: dict[Any, Any] = {}  # create empty dictionary for tracks
+        self.tracks: dict[str, list[str]] = {}  # create empty dictionary for tracks
 
         try:
             tracks_data = unformatted_json["result"]["tracks"]
