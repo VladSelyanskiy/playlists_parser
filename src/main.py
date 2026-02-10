@@ -4,6 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Form, HTTPException, status
 from fastapi.responses import FileResponse, HTMLResponse
 
+from src.schemas.tracks_output import TracksOutput
 from src.config import conf_static
 from src.services.processing import get_data
 
@@ -37,7 +38,7 @@ async def health_check():
 
 
 @app.post("/tracks")
-async def get_tracks(input_url: str = Form(...)) -> dict[str, list[str]]:
+async def get_tracks(input_url: str = Form(...)) -> TracksOutput:
     logger.info(f"Received URL: {input_url}")
     tracks_collection = get_data(input_url)
     if tracks_collection is None:
@@ -45,7 +46,10 @@ async def get_tracks(input_url: str = Form(...)) -> dict[str, list[str]]:
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid URL or failed to fetch data",
         )
-    return tracks_collection.tracks
+    output = TracksOutput(
+        tracks=tracks_collection.tracks, playlist_data=tracks_collection.playlist_data
+    )
+    return output
 
 
 if __name__ == "__main__":
